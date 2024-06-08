@@ -17,7 +17,7 @@ public class Category {
 
     @Id
     @GeneratedValue
-    private Integer categoryId;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
