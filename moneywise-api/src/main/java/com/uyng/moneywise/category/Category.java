@@ -1,5 +1,6 @@
 package com.uyng.moneywise.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uyng.moneywise.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,6 +22,7 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @Column(nullable = false)
