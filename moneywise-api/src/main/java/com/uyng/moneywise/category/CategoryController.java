@@ -16,7 +16,7 @@ public class CategoryController {
     private final CategoryService service;
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(
+    public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestBody CategoryRequest request,
             Authentication connectedUser
     ) {

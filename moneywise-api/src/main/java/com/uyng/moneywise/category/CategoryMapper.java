@@ -11,4 +11,12 @@ public class CategoryMapper {
                 .type(request.type())
                 .build();
     }
+
+    public CategoryResponse toCategoryResponse(Category category) {
+        return new CategoryResponse(
+                category.getId(),
+                category.getName(),
+                category.getType()
+        );
+    }
 }

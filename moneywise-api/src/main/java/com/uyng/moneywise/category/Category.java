@@ -1,24 +1,20 @@
 package com.uyng.moneywise.category;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uyng.moneywise.common.BaseEntity;
 import com.uyng.moneywise.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "categories")
-public class Category {
-
-    @Id
-    @GeneratedValue
-    private Integer id;
+public class Category extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
