@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("categories")
 @RequiredArgsConstructor
@@ -23,4 +25,8 @@ public class CategoryController {
         return ResponseEntity.ok(service.createCategory(request, connectedUser));
     }
 
+    @GetMapping
+    public ResponseEntity<List<CategoryResponse>> findAllCategoriesByUser(Authentication connectedUser) {
+        return ResponseEntity.ok(service.findAllCategoriesByUser(connectedUser));
+    }
 }
