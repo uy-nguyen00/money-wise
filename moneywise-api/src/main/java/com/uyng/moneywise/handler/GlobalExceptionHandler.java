@@ -3,6 +3,7 @@ package com.uyng.moneywise.handler;
 import com.uyng.moneywise.exception.ActivationCodeException;
 import com.uyng.moneywise.exception.OperationNotPermittedException;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -109,6 +110,19 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .validationErrors(errors)
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(EntityNotFoundException exp) {
+        BusinessErrorCodes businessErrorCodes = BusinessErrorCodes.NOT_FOUND;
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(businessErrorCodes.getCode())
+                                .error(exp.getMessage())
                                 .build()
                 );
     }
