@@ -1,6 +1,7 @@
 package com.uyng.moneywise.category;
 
 import com.uyng.moneywise.user.User;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,25 @@ public class CategoryService {
         return categories.stream()
                 .map(categoryMapper::toCategoryResponse)
                 .toList();
+    }
+
+    public CategoryResponse updateCategory(Integer id, CategoryRequest request, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        Category category = categoryRepository.findByIdAndUserEmail(id, user.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found."));
+
+        Category reqCategory = categoryMapper.toCategory(request);
+
+        Category updatedCategory = categoryRepository.save(
+                Category.builder()
+                        .name(reqCategory.getName())
+                        .type(reqCategory.getType())
+                        .id(category.getId())
+                        .user(category.getUser())
+                        .isDefault(category.isDefault())
+                        .build()
+        );
+
+        return categoryMapper.toCategoryResponse(updatedCategory);
     }
 }
