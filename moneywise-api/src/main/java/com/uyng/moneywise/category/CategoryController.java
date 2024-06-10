@@ -30,6 +30,14 @@ public class CategoryController {
         return ResponseEntity.ok(service.findAllCategoriesByUser(connectedUser));
     }
 
+    @GetMapping("/{category-id}")
+    public ResponseEntity<CategoryResponse> findById(
+            @PathVariable("category-id") Integer id,
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok(service.findById(id, connectedUser));
+    }
+
     @PatchMapping("/{category-id}")
     public ResponseEntity<CategoryResponse> updateCategory(
             @PathVariable("category-id") Integer id,

@@ -33,10 +33,13 @@ public class CategoryService {
                 .toList();
     }
 
+    public CategoryResponse findById(Integer id, Authentication connectedUser) {
+        Category category = getCategoryByIdAndUser(id, connectedUser);
+        return categoryMapper.toCategoryResponse(category);
+    }
+
     public CategoryResponse updateCategory(Integer id, CategoryRequest request, Authentication connectedUser) {
-        User user = (User) connectedUser.getPrincipal();
-        Category category = categoryRepository.findByIdAndUserEmail(id, user.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Category not found."));
+        Category category = getCategoryByIdAndUser(id, connectedUser);
 
         Category reqCategory = categoryMapper.toCategory(request);
 
@@ -54,11 +57,14 @@ public class CategoryService {
     }
 
     public Integer deleteCategory(Integer id, Authentication connectedUser) {
-        User user = (User) connectedUser.getPrincipal();
-        Category category = categoryRepository.findByIdAndUserEmail(id, user.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Category not found."));
-
+        Category category = getCategoryByIdAndUser(id, connectedUser);
         categoryRepository.delete(category);
         return category.getId();
+    }
+
+    private Category getCategoryByIdAndUser(Integer id, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        return categoryRepository.findByIdAndUserEmail(id, user.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found."));
     }
 }
