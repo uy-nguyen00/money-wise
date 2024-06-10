@@ -52,4 +52,13 @@ public class CategoryService {
 
         return categoryMapper.toCategoryResponse(updatedCategory);
     }
+
+    public Integer deleteCategory(Integer id, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        Category category = categoryRepository.findByIdAndUserEmail(id, user.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Category not found."));
+
+        categoryRepository.delete(category);
+        return category.getId();
+    }
 }
