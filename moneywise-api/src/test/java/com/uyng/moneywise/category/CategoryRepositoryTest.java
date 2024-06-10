@@ -110,7 +110,7 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    public void testFindByUserEmail_ReturnsAllCategories() {
+    public void testFindByUserEmail_OrderByTypeAscCreatedDateDesc_ReturnsAllCategories() {
         Category category2 = categoryRepository.save(
                 Category.builder()
                         .user(user)
@@ -121,13 +121,13 @@ public class CategoryRepositoryTest {
         );
         List<Category> expectedCategories = Arrays.asList(category, category2);
 
-        List<Category> actualCategories = categoryRepository.findByUserEmail(user.getEmail());
+        List<Category> actualCategories = categoryRepository.findByUserEmailOrderByTypeAscCreatedDateDesc(user.getEmail());
 
         assertThat(actualCategories).containsExactlyInAnyOrderElementsOf(expectedCategories);
     }
 
     @Test
-    public void testFindByUserEmail_ReturnsCategoriesForDifferentUser() {
+    public void testFindByUserEmail_ReturnsCategoriesForDifferentUserOrderByTypeAscCreatedDateDesc() {
         User user2 = User.builder().email("user2@example.com").build();
         entityManager.persist(user2);
 
@@ -140,8 +140,8 @@ public class CategoryRepositoryTest {
                         .build()
         );
 
-        List<Category> actualCategoriesForUser1 = categoryRepository.findByUserEmail(user.getEmail());
-        List<Category> actualCategoriesForUser2 = categoryRepository.findByUserEmail(user2.getEmail());
+        List<Category> actualCategoriesForUser1 = categoryRepository.findByUserEmailOrderByTypeAscCreatedDateDesc(user.getEmail());
+        List<Category> actualCategoriesForUser2 = categoryRepository.findByUserEmailOrderByTypeAscCreatedDateDesc(user2.getEmail());
 
         assertThat(actualCategoriesForUser1).containsExactly(category);
         assertThat(actualCategoriesForUser2).containsExactly(category2);

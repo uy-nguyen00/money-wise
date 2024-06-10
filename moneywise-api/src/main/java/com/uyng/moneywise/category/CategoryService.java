@@ -27,7 +27,7 @@ public class CategoryService {
 
     public List<CategoryResponse> findAllCategoriesByUser(Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
-        List<Category> categories = categoryRepository.findByUserEmail(user.getEmail());
+        List<Category> categories = categoryRepository.findByUserEmailOrderByTypeAscCreatedDateDesc(user.getEmail());
         return categories.stream()
                 .map(categoryMapper::toCategoryResponse)
                 .toList();
