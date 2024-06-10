@@ -127,7 +127,7 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    public void testFindByUserEmail_ReturnsCategoriesForDifferentUserOrderByTypeAscCreatedDateDesc() {
+    public void testFindByUserEmailOrderByTypeAscCreatedDateDesc_ReturnsCategoriesForDifferentUser() {
         User user2 = User.builder().email("user2@example.com").build();
         entityManager.persist(user2);
 
