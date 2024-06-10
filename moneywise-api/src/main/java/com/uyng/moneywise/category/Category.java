@@ -1,8 +1,6 @@
 package com.uyng.moneywise.category;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.uyng.moneywise.common.BaseEntity;
-import com.uyng.moneywise.user.User;
+import com.uyng.moneywise.common.entity.BaseEntityWithUser;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,12 +12,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "categories")
-public class Category extends BaseEntity {
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User user;
+public class Category extends BaseEntityWithUser {
 
     @Column(nullable = false)
     private String name;

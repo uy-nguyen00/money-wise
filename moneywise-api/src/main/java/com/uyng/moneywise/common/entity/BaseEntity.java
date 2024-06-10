@@ -1,4 +1,4 @@
-package com.uyng.moneywise.common;
+package com.uyng.moneywise.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity {
+public abstract class BaseEntity {
 
     @Id
     @GeneratedValue
