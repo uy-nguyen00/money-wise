@@ -3,10 +3,7 @@ package com.uyng.moneywise.transaction;
 import com.uyng.moneywise.category.Category;
 import com.uyng.moneywise.common.entity.BaseEntityWithUser;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -40,5 +37,6 @@ public class Transaction extends BaseEntityWithUser {
             joinColumns = @JoinColumn(name = "source_transaction_id"),
             inverseJoinColumns = @JoinColumn(name = "linked_transaction_id")
     )
+    @Builder.Default
     private Set<Transaction> linkedTransactions = new HashSet<>();
 }
