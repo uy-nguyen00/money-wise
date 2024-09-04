@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,12 +32,20 @@ public class Transaction extends BaseEntityWithUser {
 
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "transaction_links",
-            joinColumns = @JoinColumn(name = "source_transaction_id"),
-            inverseJoinColumns = @JoinColumn(name = "linked_transaction_id")
-    )
-    @Builder.Default
-    private Set<Transaction> linkedTransactions = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Transaction parentTransaction;
+
+    @Transient
+    @OneToMany(mappedBy = "parentTransaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Transaction> childrenTransactions = new HashSet<>();
+
+    public Set<Transaction> addChildrenTransactions(Set<Transaction> childrenTransactions) {
+        Set<Transaction> updatedChildren = new HashSet<>();
+        for (Transaction child : childrenTransactions) {
+            child.setParentTransaction(this);
+            updatedChildren.add(child);
+        }
+        return updatedChildren;
+    }
 }
