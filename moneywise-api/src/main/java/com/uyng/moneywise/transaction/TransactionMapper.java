@@ -2,32 +2,29 @@ package com.uyng.moneywise.transaction;
 
 import com.uyng.moneywise.category.Category;
 import com.uyng.moneywise.category.CategoryMapper;
+import com.uyng.moneywise.category.CategoryRepository;
 import com.uyng.moneywise.category.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class TransactionMapper {
 
     private final CategoryMapper categoryMapper;
+    private final CategoryRepository categoryRepository;
 
-    public Transaction toTransaction(
-            TransactionRequest request,
-            Category category,
-            Transaction parentTransaction
-    ) {
+    public Transaction toTransaction(TransactionRequest request) {
+        Optional<Category> category = categoryRepository.findById(request.categoryId());
+
         return Transaction.builder()
-                .amount(request.amount())
-                .category(category)
-                .date(request.date())
-                .description(request.description())
-                .parentTransaction(parentTransaction)
-                .build();
+               .amount(request.amount())
+               .category(request.category())
+               .description(request.description())
+               .date(request.date())
+               .build();
     }
 
     public TransactionResponse toTransactionResponse(Transaction transaction) {

@@ -89,8 +89,7 @@ public class TransactionRepositoryTest {
         assertThat(foundTransaction.getAmount()).isEqualTo(15.00);
         assertThat(foundTransaction.getDate()).isEqualTo(LocalDate.now());
         assertThat(foundTransaction.getDescription()).isEqualTo("test description");
-        assertThat(foundTransaction.getChildrenTransactions()).isEmpty();
-        assertThat(foundTransaction.getParentTransactions()).isEmpty();
+        assertThat(foundTransaction.getLinkedTransactions()).isEmpty();
     }
 
     @Test
@@ -118,17 +117,12 @@ public class TransactionRepositoryTest {
         linkedTransactions.add(linkedTransaction1);
         linkedTransactions.add(linkedTransaction2);
 
-        transaction.setChildrenTransactions(linkedTransactions);
+        transaction.setLinkedTransactions(linkedTransactions);
         transactionRepository.save(transaction);
 
         Transaction foundTransaction = transactionRepository.findById(transaction.getId()).orElse(null);
         assertThat(foundTransaction).isNotNull();
-        assertThat(foundTransaction.getChildrenTransactions()).containsExactlyInAnyOrder(linkedTransaction1, linkedTransaction2);
-
-        Transaction foundTransaction1 = transactionRepository.findById(linkedTransaction1.getId()).orElse(null);
-        assert foundTransaction1 != null;
-        Set<Transaction> set = foundTransaction1.getParentTransactions();
-        System.out.print("ok");
+        assertThat(foundTransaction.getLinkedTransactions()).containsExactlyInAnyOrder(linkedTransaction1, linkedTransaction2);
     }
 
     @Test

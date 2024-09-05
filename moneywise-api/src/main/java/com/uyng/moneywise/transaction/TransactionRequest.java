@@ -1,16 +1,18 @@
 package com.uyng.moneywise.transaction;
 
+import com.uyng.moneywise.category.Category;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 public record TransactionRequest(
         Integer categoryId,
-        @NotNull
-        Double amount,
-        LocalDate date,
         String description,
-        Integer parentId,
-        Set<Integer> childrenIds
+
+        @NotNull
+        @NotEmpty
+        Double amount,
+
+        LocalDate date
 ) {}
