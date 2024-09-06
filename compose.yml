@@ -22,6 +22,14 @@ services:
       - 1080:1080
       - 1025:1025
 
+  angular-app:
+    container_name: moneywise-ui
+    image: node:21
+    build:
+      context: ./moneywise-ui
+    ports:
+      - 4200:4200  
+        
 networks:
   spring-net:
     driver: bridge
