@@ -34,9 +34,30 @@ public class Transaction extends BaseEntityWithUser {
     @ManyToMany
     @JoinTable(
             name = "transaction_links",
-            joinColumns = @JoinColumn(name = "source_transaction_id"),
-            inverseJoinColumns = @JoinColumn(name = "linked_transaction_id")
+            joinColumns = @JoinColumn(name = "parent_id"),
+            inverseJoinColumns = @JoinColumn(name = "child_id")
     )
     @Builder.Default
-    private Set<Transaction> linkedTransactions = new HashSet<>();
+    private Set<Transaction> childrenTransactions = new HashSet<>();
+
+    @ManyToMany(mappedBy = "childrenTransactions")
+    @Builder.Default
+    private Set<Transaction> parentTransactions = new HashSet<>();
+
+    public void addChildTransaction(Transaction transaction) {
+        this.childrenTransactions.add(transaction);
+        transaction.parentTransactions.add(this);
+    }
+
+    public void removeChildTransaction(Transaction transaction) {
+        this.childrenTransactions.remove(transaction);
+        transaction.parentTransactions.remove(this);
+    }
+
+    public void setChildrenTransactions(Set<Transaction> childrenTransactions) {
+        this.childrenTransactions = childrenTransactions;
+        for (Transaction transaction : childrenTransactions) {
+            transaction.parentTransactions.add(this);
+        }
+    }
 }

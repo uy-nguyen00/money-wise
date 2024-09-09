@@ -17,11 +17,11 @@ public class TransactionMapper {
     private final CategoryRepository categoryRepository;
 
     public Transaction toTransaction(TransactionRequest request) {
-        Optional<Category> category = categoryRepository.findById(request.categoryId());
+        Category category = categoryRepository.findById(request.categoryId()).orElse(null);
 
         return Transaction.builder()
                .amount(request.amount())
-               .category(request.category())
+               .category(category)
                .description(request.description())
                .date(request.date())
                .build();

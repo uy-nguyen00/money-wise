@@ -89,12 +89,13 @@ public class TransactionRepositoryTest {
         assertThat(foundTransaction.getAmount()).isEqualTo(15.00);
         assertThat(foundTransaction.getDate()).isEqualTo(LocalDate.now());
         assertThat(foundTransaction.getDescription()).isEqualTo("test description");
-        assertThat(foundTransaction.getLinkedTransactions()).isEmpty();
+        assertThat(foundTransaction.getParentTransactions()).isEmpty();
+        assertThat(foundTransaction.getChildrenTransactions()).isEmpty();
     }
 
     @Test
     public void testRetrieveTransaction_WithLinkedTransactions() {
-        Transaction linkedTransaction1 = transactionRepository.save(
+        Transaction childTransaction1 = transactionRepository.save(
                 Transaction.builder()
                         .user(user)
                         .category(category)
@@ -103,7 +104,7 @@ public class TransactionRepositoryTest {
                         .description("linkedTransaction1")
                         .build()
         );
-        Transaction linkedTransaction2 = transactionRepository.save(
+        Transaction childTransaction2 = transactionRepository.save(
                 Transaction.builder()
                         .user(user)
                         .category(category)
@@ -112,17 +113,25 @@ public class TransactionRepositoryTest {
                         .description("linkedTransaction2")
                         .build()
         );
+        Transaction parentTransaction1 = transactionRepository.save(
+                Transaction.builder()
+                        .user(user)
+                        .category(category)
+                        .amount(123.45)
+                        .date(LocalDate.now())
+                        .description("linkedTransaction1")
+                        .build()
+        );
 
-        Set<Transaction> linkedTransactions = new HashSet<>();
-        linkedTransactions.add(linkedTransaction1);
-        linkedTransactions.add(linkedTransaction2);
-
-        transaction.setLinkedTransactions(linkedTransactions);
+        transaction.addChildTransaction(childTransaction1);
+        transaction.addChildTransaction(childTransaction2);
+        parentTransaction1.addChildTransaction(transaction);
         transactionRepository.save(transaction);
 
         Transaction foundTransaction = transactionRepository.findById(transaction.getId()).orElse(null);
         assertThat(foundTransaction).isNotNull();
-        assertThat(foundTransaction.getLinkedTransactions()).containsExactlyInAnyOrder(linkedTransaction1, linkedTransaction2);
+        assertThat(foundTransaction.getChildrenTransactions()).containsExactlyInAnyOrder(childTransaction1, childTransaction2);
+        assertThat(foundTransaction.getParentTransactions()).containsExactly(parentTransaction1);
     }
 
     @Test
