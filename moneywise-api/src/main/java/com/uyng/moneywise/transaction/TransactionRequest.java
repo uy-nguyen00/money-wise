@@ -11,7 +11,6 @@ public record TransactionRequest(
         String description,
 
         @NotNull
-        @NotEmpty
         Double amount,
 
         LocalDate date

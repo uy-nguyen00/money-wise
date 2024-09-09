@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
@@ -19,5 +21,13 @@ public class TransactionService {
 
         Transaction savedTransaction = transactionRepository.save(transaction);
         return transactionMapper.toTransactionResponse(savedTransaction);
+    }
+
+    public List<TransactionResponse> findAllTransactionsByUser(Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        List<Transaction> transactions = transactionRepository.findByUser(user);
+        return transactions.stream()
+                .map(transactionMapper::toTransactionResponse)
+                .toList();
     }
 }
