@@ -9,6 +9,4 @@ public class OperationNotPermittedException extends RuntimeException {
         super(message);
     }
 
-    public void TestGithubActionsException(String message) {
-    }
 }
